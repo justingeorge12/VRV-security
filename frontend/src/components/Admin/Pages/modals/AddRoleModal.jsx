@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from '../../../../service/api'
 import toast from 'react-hot-toast'
 
-function AddRoleModal({onClose, fetchRoles}) {
+function AddRoleModal({onClose, fetchRoles, roles}) {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
     const [submitLoading, setSubmitLoading] = useState(false)
+
+    console.log(roles)
+
+    useEffect(() => {
+        if(roles) {
+            setName(roles.name)
+            setDescription(roles.description)
+        }
+    }, [roles])
 
     const validateForm = () => {
         const newErrors = {};
@@ -32,14 +41,22 @@ function AddRoleModal({onClose, fetchRoles}) {
         setSubmitLoading(true)
 
         try {
-            const res = await api.post("roles/", {name, description, });
+            let res
+            if(roles) {
+                res = await api.put(`roles/${roles.id}/`, {name, description})
+            }
+            else {
+                res = await api.post('roles/', {name, description}) 
+            }
+
+            // const res = await api.post("roles/", {name, description, });
             setName("");
             setDescription("");
             setErrors({});
             toast.success('role added successfully')
             console.log("API response:", res.data);
             fetchRoles()
-            onclose()
+            onClose()
         } 
         catch (err) {
             console.error("API error:", err);

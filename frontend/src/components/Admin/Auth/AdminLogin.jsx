@@ -18,6 +18,22 @@ function AdminLogin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!email) {
+            toast.error("Email is required.");
+            return;
+        }
+    
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+    
+        if (!password) {
+            toast.error("Password is required.");
+            return;
+        }
+    
+
         try {
             const res = await api.post('/token', {email, password, role:'admin'})
             const { access, refresh, role, user_id } = res.data;

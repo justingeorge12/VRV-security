@@ -33,14 +33,13 @@ class CustomUserManager(BaseUserManager):
 
 class Users(AbstractUser):
     email = models.EmailField(unique=True)
-    username = None  
+    username = None 
+    coins = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []  
 
     objects = CustomUserManager()
-
-
 
 
 

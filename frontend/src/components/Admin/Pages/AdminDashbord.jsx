@@ -55,7 +55,7 @@ function AdminDashbord() {
                             </div>
 
 
-                            <div className="flex space-x-16 animate-loop-scroll group-hover:paused" aria-hidden='true'>
+                            <div className="flex space-x-16 animate-loop-scroll group-hover:paused cursor-pointer" aria-hidden='true'>
 
                             <div onClick={() => navigate('/admin/users')} className="w-60 p-2 border border-slate-700 rounded-md ">
                                     <h2 className="text-lg flex justify-center font-bold">Users</h2>

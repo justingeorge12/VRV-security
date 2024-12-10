@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { handleLogout } from "../Auth/handleLogout"
 
 function SideBar() {
 
@@ -26,7 +27,7 @@ function SideBar() {
                             <li onClick={() => { navigate('/admin/users') }} className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-zinc-800 hover:border hover:border-zinc-700 cursor-pointer"> 👥 <span className="ms-2">Users</span> </li>
                             <li onClick={() => { navigate('/admin/roles') }} className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-zinc-800 hover:border hover:border-zinc-700 cursor-pointer "> 🔖 <span className="ms-2">Roles</span></li>
                             <li onClick={() => {navigate('/admin/products')}} className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-zinc-800 hover:border hover:border-zinc-700 cursor-pointer "> 🛍️ <span className="ms-2">Products</span></li>
-                            <li onClick={() => setLogoutModal(true)} className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-zinc-800 hover:border hover:border-zinc-700 cursor-pointer"> 🔒<span className="ms-2">Logout</span></li>
+                            <li onClick={() => handleLogout(navigate)} className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-zinc-800 hover:border hover:border-zinc-700 cursor-pointer"> 🔒<span className="ms-2">Logout</span></li>
                         </ul>
                     </div>
                 </div>

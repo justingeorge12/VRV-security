@@ -9,11 +9,14 @@ function ManageRole() {
     const [list, setList] = useState([]);
     const [expandDesc, setExpandDesc] = useState(null);
     const [openAddRole, setOpenAddRole] = useState(false)
+    const [currentRole, setCurrentRole] = useState(null)
     
     const fetchRoles = async () => {
         try{
 
             const res = await api.get('roles')
+            console.log(res)
+            setList(res.data)
         }
         catch(err) {
             console.log(err)
@@ -24,6 +27,16 @@ function ManageRole() {
     useEffect(() => {
         fetchRoles()
     }, [])
+    
+    const handleAdd = () => {
+        setCurrentRole(null)
+        setOpenAddRole(true)
+    }
+
+    const handleEditClick = (tag) => {
+        setOpenAddRole(true)
+        setCurrentRole(tag)
+    }
 
     return(
         <div>
@@ -34,7 +47,7 @@ function ManageRole() {
                     </div>
 
                     <div className="flex justify-end ">
-                        <button onClick={() => setOpenAddRole(!openAddRole)} className="mr-1 mb-2 px-4 md:px-4 md:py-2 py-1 rounded-md shadow-2xl font-mono text-sm md:text-base sm:ml-0 border border-x-orange-400 border-r-green-300 border-t-yellow-300 border-lime-300">
+                        <button onClick={handleAdd} className="mr-1 mb-2 px-4 md:px-4 md:py-2 py-1 rounded-md shadow-2xl font-mono text-sm md:text-base sm:ml-0 border border-x-orange-400 border-r-green-300 border-t-yellow-300 border-lime-300">
                             ADD ROLE
                         </button>
                     </div>
@@ -86,7 +99,7 @@ function ManageRole() {
             </LayoutSideBar>
             <div>
                 {openAddRole && 
-                    <AddRoleModal onClose={() => setOpenAddRole(false)} fetchRoles={fetchRoles}/>
+                    <AddRoleModal onClose={() => setOpenAddRole(false)} fetchRoles={fetchRoles} roles={currentRole}/>
                 }
             </div>
         </div>

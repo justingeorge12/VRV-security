@@ -1,4 +1,6 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { handleLogout } from "../Auth/handleLogout"
 
 function Nav() {
 
@@ -14,7 +16,7 @@ function Nav() {
                         </div>
                         <div>
                             <button onClick={() => navigate('/admin/users')} className="p-2">Activities »</button>
-                            <button className="p-2">Logout</button>
+                            <button onClick={() => handleLogout(navigate)} className="p-2">Logout</button>
                         </div>
                     </div>
                 </div>

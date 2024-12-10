@@ -1,7 +1,8 @@
 import { useState } from "react";
 import api from "../../../../service/api";
+import toast from "react-hot-toast";
 
-function AddProductModal({onClose}) {
+function AddProductModal({onClose, fetchProducts}) {
 
     const [name, setName] = useState("");
     const [coins, setCoins] = useState("");
@@ -50,8 +51,10 @@ function AddProductModal({onClose}) {
             setCoins("");
             setImage(null);
             setErrors({});
-            setSuccessMessage("Product added successfully!");
-            console.log("API response:", res.data);
+            onClose()
+            fetchProducts()
+            toast.success('product is successfully added')
+            
         } 
         catch (err) {
             console.error("API error:", err);

@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LayoutSideBar from "../Layouts/LayoutSideBar"
 import SideBar from "../Layouts/SideBar"
 import AddUserModal from "./modals/AddUserModal";
+import api from "../../../service/api";
+import ConfirmModal from '../../Admin/Layouts/ConfirmModal'
+import toast from "react-hot-toast";
+import EditUserModal from "./modals/EditUserModal";
 
 function ManageUsers() {
 
@@ -10,7 +14,45 @@ function ManageUsers() {
     const [blockModal, setBlockModal] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [openAddUser, setOpenAddUser] = useState(false)
+    const [message, setMessage] = useState({ action: '' });
+    const [openEditUser, setOpenEditUser] = useState(false)
+    const [editDetail, setEditDetail] = useState(null)
     
+    const fetchUsers = async () =>{
+
+        try{
+            const res = await api.get(`/users?search=${search}`)
+            console.log(res)
+            if (res.status === 200) {
+                setUserlist(res.data)
+                console.log(res.data)
+            }
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
+    
+    useEffect(() => {
+        fetchUsers()
+    }, [search])
+
+
+    const handleBlock = async () => {
+        try {
+            const res = await api.patch(`blockuser/${selectedUserId}`);
+            if (res.status === 200) {
+                toast.success(res.data.message);
+                fetchUsers();
+            }
+        } catch (err) {
+            console.log(err);
+            toast.error("There was an error occurred");
+        } finally {
+            setBlockModal(false);
+            setSelectedUserId(null);
+        }
+    };
 
     return(
         <div>
@@ -40,6 +82,7 @@ function ManageUsers() {
                                             <th scope="col" className="px-6 py-3">Email</th>
                                             <th scope="col" className="px-6 py-3">D of Join</th>
                                             <th scope="col" className="px-6 py-3">Role</th>
+                                            <th scope="col" className="px-6 py-3">Coins</th>
                                             <th scope="col" className="px-6 py-3">Action</th>
                                         </tr>
                                     </thead>
@@ -48,19 +91,22 @@ function ManageUsers() {
                                             userlist.map((data, index) => (
                                                 <tr key={index} className="border-b border-slate-700">
                                                     <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">{data.id}</th>
-                                                    <td className="px-6 py-4">{data.username}</td>
+                                                    <td className="px-6 py-4">{data.first_name}</td>
                                                     <td className="px-6 py-4">{data.email}</td>
                                                     <td className="px-6 py-4">{data.date_joined.slice(0, 10)}</td>
-                                                    <td className="px-6 py-4">{data.role}</td>
+                                                    <td className="px-6 py-4">{data.role?.[0]?.name}</td>
+                                                    <td className="px-6 py-4">{data.coins}</td>
+
                                                     <td className="px-6 py-4 gap-2 whitespace-nowrap">
-                                                        <button
-                                                            onClick={() => {
+                                                        <button onClick={()=> {setEditDetail(data);setOpenEditUser(true)}} className="px-2 py-1 mr-2 border border-lime-400 rounded-sm">Edit</button>
+                                                        <button onClick={() => {
                                                                 setBlockModal(!blockModal);
                                                                 setSelectedUserId(data.id);
+                                                                setMessage({ action: data.is_active ? 'block' : 'unblock' });
                                                             }}
                                                             className="px-2 py-1 border border-red-800 rounded-sm"
                                                         >
-                                                            {data.is_blocked ? "Unblock" : "Block"}
+                                                            {data.is_active ? "Block" : "Unblock"}
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -84,7 +130,15 @@ function ManageUsers() {
             </LayoutSideBar>
             <div>
                 {openAddUser && 
-                <AddUserModal onClose={() => setOpenAddUser(false)}/>}
+                <AddUserModal onClose={() => setOpenAddUser(false)} fetchUsers={fetchUsers}/>}
+            </div>
+            <div>
+                {blockModal &&
+                <ConfirmModal onClose={() => setBlockModal(false)} func={handleBlock} message={message.action}/>}
+            </div>
+            <div>
+                {openEditUser &&
+                <EditUserModal onClose={() => setOpenEditUser(false) } user={editDetail} fetchUsers={fetchUsers}/>}
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LayoutSideBar from "../Layouts/LayoutSideBar"
 import AddProductModal from "./modals/AddProductModal";
+import api from "../../../service/api";
 
 function ManageProducts() {
     
@@ -8,6 +9,24 @@ function ManageProducts() {
     const [next, setNext] = useState(null);
     const [products, setProducts] = useState([])
     const [openAddProduct, setOpenAddProduct] = useState(false)
+
+    const fetchProducts = async () => {
+
+        try{
+            const res = await api.get('product')
+            if (res.status === 200) {
+                setProducts(res.data.results)
+            }
+            console.log(res)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchProducts()
+    }, [])
 
     return(
         <div>
@@ -76,7 +95,7 @@ function ManageProducts() {
                 </div>
             </LayoutSideBar>
             {openAddProduct &&
-                <AddProductModal onClose={() => setOpenAddProduct(false)} />}
+                <AddProductModal onClose={() => setOpenAddProduct(false)} fetchProducts={fetchProducts} />}
         </div>
     )
 }
