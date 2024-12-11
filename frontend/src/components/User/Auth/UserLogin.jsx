@@ -65,8 +65,8 @@ function UserLogin() {
                 navigate('/')
             }
             else if (role === 'manager'){
-                console.log('navigate to manaGer')
-                navigate('/manager')
+                console.log('navigate to manaGer',role)
+                navigate('/manager/')
             }
 
         } catch (error) {

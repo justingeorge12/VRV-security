@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 function ProtectedRoute({element, role}) {
     const currentRole = useSelector((state) => state.auth?.role);
 
-    useEffect(() => {
+    useEffect(() => {   
         console.log("Current Role:", currentRole);
         console.log("Expected Role:", role);
     }, [currentRole, role]);

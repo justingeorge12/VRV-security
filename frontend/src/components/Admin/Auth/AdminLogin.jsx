@@ -38,7 +38,7 @@ function AdminLogin() {
             const res = await api.post('/token', {email, password, role:'admin'})
             const { access, refresh, role, user_id } = res.data;
             dispatch(loginSuccess({ access_token: access, refresh_token: refresh, user_id, role }));
-            navigate('/admin')
+            navigate('/admin/')
 
                 
             

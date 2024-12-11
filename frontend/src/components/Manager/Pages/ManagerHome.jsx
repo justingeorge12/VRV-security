@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../../../redux/authSlice"
+import api from "../../../service/api"
 
 function ManagerHome() {
 
