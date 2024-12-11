@@ -10,9 +10,7 @@ This project is a Role-Based Access Control (RBAC) system designed to provide ad
 # work flow
 ADMIN 
 admin can add, edit role  
-
 admin can add, edit, block users based on role  
-
 admin can add product  
 
 
@@ -20,7 +18,6 @@ Once admin login he cannot go to any other page but only admin's pages, also he 
 
 USER 
 user can login with specific role  
-
 user can register (role will be user only)  
 
 
